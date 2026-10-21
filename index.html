@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Angelou Fiel · AI-Assisted Software Developer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f6f9fe; --surface:#ffffff; --ink:#101a30; --muted:#5a6a86; --line:#e5ebf5;
+    --soft:#eef2ff; --g1:#7c3aed; --g2:#06b6d4; --g3:#db2777;
+    --radius:16px; --shadow:0 10px 30px rgba(20,40,90,.06); --shadow-lg:0 22px 50px rgba(20,40,90,.12);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--bg);color:var(--ink);font-family:'Inter',sans-serif;overflow-x:hidden;line-height:1.6;}
+  h1,h2,h3,.display{font-family:'Sora',sans-serif;letter-spacing:-.02em;line-height:1.08;font-weight:800;}
+  a{color:inherit;text-decoration:none;}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 24px;}
+  .grad{background:linear-gradient(110deg,var(--g1),var(--g2));-webkit-background-clip:text;background-clip:text;color:transparent;}
+  .eyebrow{font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--g1);font-weight:700;}
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:12px 24px;border-radius:12px;font-weight:600;font-size:.95rem;transition:.22s;cursor:pointer;border:1px solid transparent;}
+  .btn-grad{background:linear-gradient(110deg,var(--g1),var(--g2));color:#fff;box-shadow:0 10px 24px rgba(124,58,237,.28);}
+  .btn-grad:hover{transform:translateY(-2px);box-shadow:0 14px 32px rgba(6,182,212,.3);}
+  .btn-ghost{border-color:var(--line);color:var(--ink);background:#fff;}
+  .btn-ghost:hover{border-color:var(--g1);color:var(--g1);}
+
+  #progress{position:fixed;top:0;left:0;height:3px;width:0;z-index:60;background:linear-gradient(90deg,var(--g1),var(--g2));}
+  .aurora{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none;}
+  .blob{position:absolute;border-radius:50%;filter:blur(100px);opacity:.16;}
+  .b1{width:460px;height:460px;background:var(--g1);top:-140px;left:-60px;}
+  .b2{width:420px;height:420px;background:var(--g2);top:6%;right:-120px;}
+
+  nav{position:fixed;top:0;left:0;right:0;z-index:50;transition:.3s;}
+  nav.scrolled{background:rgba(255,255,255,.88);backdrop-filter:blur(14px);border-bottom:1px solid var(--line);}
+  .navrow{display:flex;align-items:center;justify-content:space-between;padding:15px 24px;max-width:1120px;margin:0 auto;}
+  .logo{display:flex;align-items:center;gap:10px;font-family:'Sora';font-weight:800;font-size:1.02rem;}
+  .logo-mark{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,var(--g1),var(--g2));color:#fff;display:grid;place-items:center;font-size:.82rem;box-shadow:0 6px 16px rgba(124,58,237,.3);}
+  .navlinks{display:flex;gap:22px;align-items:center;}
+  .navlinks a:not(.btn){color:var(--muted);font-size:.9rem;font-weight:500;}
+  .navlinks a:not(.btn):hover{color:var(--g1);}
+  .avail{display:inline-flex;align-items:center;gap:7px;font-size:.8rem;color:var(--muted);}
+  .avail .pdot{width:8px;height:8px;border-radius:50%;background:#16a34a;animation:ping 2s infinite;}
+  @keyframes ping{0%{box-shadow:0 0 0 0 rgba(22,163,74,.4);}70%{box-shadow:0 0 0 8px rgba(22,163,74,0);}100%{box-shadow:0 0 0 0 rgba(22,163,74,0);}}
+  @media(max-width:860px){.navlinks a:not(.btn),.avail{display:none;}}
+
+  .hero{padding:130px 0 70px;position:relative;}
+  .hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:46px;align-items:center;}
+  .hero h1{font-size:clamp(2.3rem,5.5vw,3.7rem);margin:16px 0 20px;}
+  .hero p.sub{color:var(--muted);font-size:1.12rem;max-width:33rem;margin-bottom:28px;}
+  .hero .btns{display:flex;gap:12px;flex-wrap:wrap;}
+  #rotate{display:inline-block;transition:opacity .3s;}
+  .hero-photo{position:relative;border-radius:22px;overflow:hidden;box-shadow:var(--shadow-lg);aspect-ratio:4/5;background:linear-gradient(150deg,#ede9fe,#e0f7fb 55%,#fce7f3);display:grid;place-items:center;padding:26px;}
+  .hero-photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:3;}
+  .mock{width:100%;background:#fff;border-radius:14px;box-shadow:0 20px 40px rgba(20,40,90,.14);overflow:hidden;}
+  .mock-top{height:32px;background:#f3f5fb;display:flex;align-items:center;gap:6px;padding:0 12px;border-bottom:1px solid var(--line);}
+  .mock-top span{width:9px;height:9px;border-radius:50%;background:#d7def0;}
+  .mock-top span:first-child{background:#f7a8c4;}.mock-top span:nth-child(2){background:#f7d08a;}.mock-top span:nth-child(3){background:#9ee6c4;}
+  .mock-body{padding:18px;}
+  .mock-row{height:9px;border-radius:5px;background:#eef1f8;margin-bottom:10px;}
+  .mock-row.w80{width:80%;height:12px;background:linear-gradient(90deg,var(--g1),var(--g2));opacity:.85;}
+  .mock-row.w60{width:55%;}.mock-row.w70{width:70%;}.mock-row.w40{width:40%;}
+  .mock-bars{display:flex;align-items:flex-end;gap:8px;height:72px;margin:14px 0;}
+  .mock-bars i{flex:1;border-radius:6px 6px 0 0;background:linear-gradient(180deg,var(--g1),var(--g2));opacity:.75;}
+  @media(max-width:860px){.hero-grid{grid-template-columns:1fr;}.hero-photo{order:-1;max-width:340px;aspect-ratio:4/4;}}
+
+  .statbar{display:flex;flex-wrap:wrap;gap:14px;margin-top:32px;}
+  .statbox{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 22px;box-shadow:var(--shadow);}
+  .statbox .n{font-family:'Sora';font-weight:800;font-size:1.7rem;} .statbox .l{color:var(--muted);font-size:.8rem;}
+
+  section{padding:80px 0;position:relative;}
+  .alt{}
+  .sec-head{margin-bottom:42px;max-width:640px;}
+  .sec-head h2{font-size:clamp(1.8rem,4vw,2.6rem);margin-top:8px;}
+  .sec-head p{color:var(--muted);margin-top:12px;}
+  .center{margin-left:auto;margin-right:auto;text-align:center;}
+
+  .reveal{opacity:0;transform:translateY(26px);transition:.65s cubic-bezier(.2,.7,.2,1);}
+  .reveal.in{opacity:1;transform:none;}
+
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:20px;}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:26px;box-shadow:var(--shadow);transition:.25s;}
+  .card:hover{transform:translateY(-5px);border-color:var(--g1);box-shadow:var(--shadow-lg);}
+  .badge{width:48px;height:48px;border-radius:13px;background:var(--soft);color:var(--g1);display:grid;place-items:center;font-size:1.4rem;margin-bottom:15px;}
+  .card h3{font-size:1.14rem;font-weight:700;margin-bottom:8px;}
+  .card p{color:var(--muted);font-size:.92rem;}
+  .pain{border-left:3px solid #f2a8c4;}
+
+  .proj{background:var(--surface);border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:var(--shadow);transition:.25s;}
+  .proj:hover{transform:translateY(-5px);border-color:var(--g1);box-shadow:var(--shadow-lg);}
+  .ph{position:relative;aspect-ratio:16/10;background:linear-gradient(135deg,#ede9fe,#d5f3fb);display:grid;place-items:center;overflow:hidden;}
+  .ph::before{content:"";position:absolute;top:0;left:0;right:0;height:28px;background:rgba(255,255,255,.55);border-bottom:1px solid rgba(255,255,255,.7);}
+  .ph::after{content:"";position:absolute;top:10px;left:13px;width:8px;height:8px;border-radius:50%;background:rgba(247,168,196,.9);box-shadow:14px 0 0 rgba(247,208,138,.9),28px 0 0 rgba(158,230,196,.95);}
+  .ph .ic{font-size:3rem;opacity:.85;margin-top:14px;}
+  .ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:2;}
+  .proj-b{padding:22px;}
+  .proj-b h3{font-size:1.1rem;margin-bottom:8px;}
+  .proj-b p{color:var(--muted);font-size:.9rem;margin-bottom:14px;}
+  .tags{display:flex;flex-wrap:wrap;gap:7px;}
+  .tag{font-size:.68rem;color:var(--g1);background:var(--soft);border-radius:999px;padding:4px 11px;font-weight:600;}
+
+  .stackgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;}
+  .stackcol{background:#fff;border:1px solid var(--line);border-radius:16px;padding:20px;box-shadow:var(--shadow);}
+  .stackcol h4{font-size:.8rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:12px;}
+  .chip{display:inline-block;border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 12px;font-size:.85rem;font-weight:500;margin:0 6px 6px 0;}
+
+  .about{display:grid;grid-template-columns:260px 1fr;gap:40px;align-items:center;}
+  .avatar{aspect-ratio:1;border-radius:22px;padding:4px;background:linear-gradient(135deg,var(--g1),var(--g2));box-shadow:var(--shadow-lg);}
+  .avatar img,.avatar .fb{width:100%;height:100%;border-radius:18px;object-fit:cover;}
+  .avatar .fb{background:#101a30;display:grid;place-items:center;font-family:'Sora';font-weight:800;font-size:3.4rem;color:#fff;}
+  @media(max-width:680px){.about{grid-template-columns:1fr;justify-items:center;text-align:center;}.avatar{max-width:240px;}}
+
+  .faq details{background:#fff;border:1px solid var(--line);border-radius:12px;margin-bottom:10px;padding:2px 20px;box-shadow:var(--shadow);}
+  .faq summary{cursor:pointer;font-weight:600;padding:14px 0;list-style:none;}
+  .faq summary::-webkit-details-marker{display:none;}
+  .faq summary::after{content:"+";float:right;color:var(--g1);font-weight:700;}
+  .faq details[open] summary::after{content:"–";}
+  .faq p{color:var(--muted);font-size:.92rem;padding-bottom:14px;}
+
+  .cta-band{background:linear-gradient(120deg,var(--g1),var(--g2));border-radius:26px;color:#fff;text-align:center;padding:54px 30px;box-shadow:var(--shadow-lg);}
+
+  .contact-card{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:32px;max-width:560px;margin:0 auto;overflow:hidden;box-shadow:var(--shadow-lg);}
+  .field{width:100%;max-width:100%;background:#f8fafd;border:1px solid var(--line);border-radius:10px;padding:12px 15px;color:var(--ink);font-family:inherit;font-size:.95rem;margin-bottom:13px;}
+  .field:focus{outline:none;border-color:var(--g1);box-shadow:0 0 0 3px rgba(124,58,237,.12);background:#fff;}
+  textarea.field{resize:vertical;min-height:120px;}
+  #formMsg{font-size:.9rem;margin-top:6px;}
+  .links{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:22px;}
+  .links a{border:1px solid var(--line);background:#fff;border-radius:999px;padding:9px 18px;color:var(--muted);font-size:.9rem;transition:.2s;}
+  .links a:hover{color:var(--g1);border-color:var(--g1);}
+
+  footer{border-top:1px solid var(--line);padding:32px 0;color:var(--muted);font-size:.85rem;text-align:center;background:#fff;}
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;scroll-behavior:auto;}.reveal{opacity:1;transform:none;transition:none;}}
+</style>
+</head>
+<body>
+
+<div id="progress"></div>
+<div class="aurora"><div class="blob b1"></div><div class="blob b2"></div></div>
+
+<nav id="nav">
+  <div class="navrow">
+    <div class="logo"><span class="logo-mark">AF</span> Angelou Fiel</div>
+    <div class="navlinks">
+      <span class="avail"><span class="pdot"></span> Available for projects</span>
+      <a href="#work">Work</a><a href="#services">Services</a><a href="#about">About Me</a><a href="#contact">Contact</a><a href="resume.pdf" target="_blank" rel="noopener">Résumé</a>
+      <a href="#contact" class="btn btn-grad" style="padding:9px 18px;">Let's talk</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="wrap">
+    <div class="hero-grid">
+      <div class="reveal">
+        <div class="eyebrow">AI-Assisted Software Developer · Philippines</div>
+        <h1>I turn your idea into<br>a working <span class="grad" id="rotate">system</span>.</h1>
+        <p class="sub">I build complete, real-world software — business systems, web &amp; mobile apps, and IoT dashboards — <b style="color:var(--ink)">faster</b>, because I develop AI-assisted. From first idea to a tested system your team can actually use.</p>
+        <div class="btns">
+          <a href="#contact" class="btn btn-grad">Build my system →</a>
+          <a href="#work" class="btn btn-ghost">See my work</a>
+        </div>
+        <div class="statbar">
+          <div class="statbox"><div class="n"><span class="count" data-target="6">0</span>+</div><div class="l">Systems built</div></div>
+          <div class="statbox"><div class="n"><span class="count" data-target="5">0</span></div><div class="l">Capstone projects</div></div>
+          <div class="statbox"><div class="n"><span class="count" data-target="100">0</span>%</div><div class="l">Delivered &amp; tested</div></div>
+        </div>
+      </div>
+      <div class="hero-photo reveal">
+        <img src="hero.jpg" alt="Angelou Fiel" onerror="this.remove()">
+        <div class="mock">
+          <div class="mock-top"><span></span><span></span><span></span></div>
+          <div class="mock-body">
+            <div class="mock-row w80"></div>
+            <div class="mock-row w60"></div>
+            <div class="mock-bars"><i style="height:55%"></i><i style="height:80%"></i><i style="height:45%"></i><i style="height:95%"></i><i style="height:68%"></i></div>
+            <div class="mock-row w70"></div>
+            <div class="mock-row w40"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- HOOK -->
+<section class="alt">
+  <div class="wrap">
+    <div class="sec-head reveal"><div class="eyebrow">Sound familiar?</div><h2>Running on paper, or stuck with software that doesn't fit?</h2></div>
+    <div class="cards">
+      <div class="card pain reveal"><b>Manual work eats your day</b><p style="margin-top:8px;">Counting, recording, and computing by hand — hours you'll never get back.</p></div>
+      <div class="card pain reveal"><b>Off-the-shelf apps don't fit</b><p style="margin-top:8px;">You bend your business to the software instead of the other way around.</p></div>
+      <div class="card pain reveal"><b>Developers are slow &amp; pricey</b><p style="margin-top:8px;">Months of waiting and a bill to match. There's a faster way now.</p></div>
+    </div>
+    <p class="reveal" style="margin-top:24px;color:var(--muted);">I build systems shaped around <b style="color:var(--ink)">how you actually work</b> — and because I develop AI-assisted, you get it sooner and for less.</p>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="wrap">
+    <div class="sec-head reveal"><div class="eyebrow">What I build</div><h2>Real systems, made to fit.</h2></div>
+    <div class="cards">
+      <div class="card reveal"><div class="badge">🗂️</div><h3>Business &amp; POS Systems</h3><p>Inventory, sales, records, users and roles — the daily engine of your business.</p></div>
+      <div class="card reveal"><div class="badge">🌐</div><h3>Web Applications</h3><p>Custom dashboards and portals that run on any browser, phone or computer.</p></div>
+      <div class="card reveal"><div class="badge">📱</div><h3>Mobile Apps</h3><p>Android apps built with Flutter, connected to your system and data.</p></div>
+      <div class="card reveal"><div class="badge">📡</div><h3>IoT &amp; Hardware Systems</h3><p>Sensors and devices (ESP32) feeding live dashboards with alerts and SMS.</p></div>
+      <div class="card reveal"><div class="badge">💳</div><h3>Online Payments</h3><p>Accept GCash, cards and bank transfers with secure, verified checkout.</p></div>
+      <div class="card reveal"><div class="badge">🤖</div><h3>AI-Powered Features</h3><p>Chat assistants, smart search, and auto-generated reports inside your system.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- WORK -->
+<section id="work" class="alt">
+  <div class="wrap">
+    <div class="sec-head reveal"><div class="eyebrow">Featured work</div><h2>Systems I've built.</h2><p>Real projects, really built and tested. Add your own screenshots to bring each one to life.</p></div>
+    <div class="cards">
+      <div class="proj reveal"><div class="ph"><img src="proj1.jpg" onerror="this.remove()"><span class="ic">📚</span></div><div class="proj-b"><h3>Bayside — Library System</h3><p>Web-based city library management: book &amp; member records, borrowing/returns, serial tracking, and reports.</p><div class="tags"><span class="tag">PHP</span><span class="tag">MySQL</span><span class="tag">Capstone</span></div></div></div>
+      <div class="proj reveal"><div class="ph"><img src="proj2.jpg" onerror="this.remove()"><span class="ic">🌾</span></div><div class="proj-b"><h3>FarmDirect Dumalinao</h3><p>A marketplace connecting local farmers to buyers — three roles, product catalog, orders, and online payments (GCash / card).</p><div class="tags"><span class="tag">PHP</span><span class="tag">Bootstrap</span><span class="tag">PayMongo</span></div></div></div>
+      <div class="proj reveal"><div class="ph"><img src="proj3.jpg" onerror="this.remove()"><span class="ic">📍</span></div><div class="proj-b"><h3>SafeTrack — GPS Child Tracker</h3><p>A child-safety GPS tracker: real-time location, road-following geofencing, and SMS alerts, with a parent mobile app.</p><div class="tags"><span class="tag">Flutter</span><span class="tag">Firebase</span><span class="tag">ESP32</span></div></div></div>
+      <div class="proj reveal"><div class="ph"><img src="proj4.jpg" onerror="this.remove()"><span class="ic">💡</span></div><div class="proj-b"><h3>LumiSense — Smart Streetlights</h3><p>IoT streetlight monitoring &amp; alert system: live voltage/current sensing, map view, fault alerts, billing and maintenance.</p><div class="tags"><span class="tag">ESP32</span><span class="tag">PHP</span><span class="tag">IoT</span></div></div></div>
+      <div class="proj reveal"><div class="ph"><img src="proj5.jpg" onerror="this.remove()"><span class="ic">🌡️</span></div><div class="proj-b"><h3>Heat Stress Monitoring (IoT)</h3><p>ESP32 sensors feeding a live PHP/MySQL dashboard with threshold alerts, history, and Excel export.</p><div class="tags"><span class="tag">ESP32</span><span class="tag">PHP</span><span class="tag">IoT</span></div></div></div>
+      <div class="proj reveal"><div class="ph"><img src="proj6.jpg" onerror="this.remove()"><span class="ic">🏪</span></div><div class="proj-b"><h3>BizCore — Business System</h3><p>Inventory, sales/POS, user roles, reports, and an optional built-in AI assistant — a reusable base for small-business systems.</p><div class="tags"><span class="tag">PHP</span><span class="tag">MySQL</span><span class="tag">AI</span></div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- TECH STACK -->
+<section id="stack">
+  <div class="wrap">
+    <div class="sec-head reveal"><div class="eyebrow">Toolkit</div><h2>Built with the right tools.</h2></div>
+    <div class="stackgrid">
+      <div class="stackcol reveal"><h4>Web</h4><span class="chip">PHP</span><span class="chip">MySQL</span><span class="chip">Bootstrap</span><span class="chip">JavaScript</span></div>
+      <div class="stackcol reveal"><h4>Backend &amp; Mobile</h4><span class="chip">Python</span><span class="chip">FastAPI</span><span class="chip">Flutter</span><span class="chip">Firebase</span></div>
+      <div class="stackcol reveal"><h4>IoT &amp; Payments</h4><span class="chip">ESP32 / Arduino</span><span class="chip">Sensors</span><span class="chip">PayMongo</span></div>
+      <div class="stackcol reveal"><h4>AI</h4><span class="chip">Claude / OpenAI API</span><span class="chip">Prompt Engineering</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW I WORK -->
+<section class="alt">
+  <div class="wrap">
+    <div class="sec-head reveal"><div class="eyebrow">How I work</div><h2>From idea to running system.</h2></div>
+    <div class="cards">
+      <div class="card reveal"><div class="grad" style="font-family:Sora;font-weight:800;font-size:1.1rem;">01</div><h3 style="margin:6px 0;">Discover</h3><p>We talk through your process and exactly what you need.</p></div>
+      <div class="card reveal"><div class="grad" style="font-family:Sora;font-weight:800;font-size:1.1rem;">02</div><h3 style="margin:6px 0;">Build</h3><p>I develop it AI-assisted — fast, and tested as I go.</p></div>
+      <div class="card reveal"><div class="grad" style="font-family:Sora;font-weight:800;font-size:1.1rem;">03</div><h3 style="margin:6px 0;">Deliver</h3><p>Set up, deployed, and taught to you and your team.</p></div>
+      <div class="card reveal"><div class="grad" style="font-family:Sora;font-weight:800;font-size:1.1rem;">04</div><h3 style="margin:6px 0;">Support</h3><p>I keep it running and improve it over time.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="wrap">
+    <div class="about">
+      <div class="avatar reveal"><img src="me.jpg" alt="Angelou Fiel" onerror="this.style.display='none';this.nextElementSibling.style.display='grid';"><div class="fb" style="display:none;">AF</div></div>
+      <div class="reveal">
+        <div class="eyebrow">About me</div>
+        <h2 style="font-size:clamp(1.6rem,4vw,2.3rem);margin:10px 0 14px;">Hi, I'm Angelou.</h2>
+        <p style="color:var(--muted);max-width:34rem;">I'm a BSIT student and software developer from Pagadian City, Philippines. I've built real, working systems — a city library system, a farmer marketplace with online payments, a GPS child-safety tracker, and IoT monitoring dashboards. I develop AI-assisted, which lets me deliver complete, tested systems faster than the old way. I speak English, Taglish, and Bisaya, and I work with both local and online clients. If you can describe your business, I can build the system for it.</p>
+        <div class="btns" style="margin-top:20px;"><a href="#contact" class="btn btn-grad">Work with me →</a> <a href="#work" class="btn btn-ghost">View projects</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY ME -->
+<section class="alt">
+  <div class="wrap">
+    <div class="sec-head reveal center"><div class="eyebrow">Why work with me</div><h2>Faster, fitted, and supported.</h2></div>
+    <div class="cards">
+      <div class="card reveal"><div class="badge">⚡</div><h3>Faster delivery</h3><p>AI-assisted development means weeks, not months.</p></div>
+      <div class="card reveal"><div class="badge">🎯</div><h3>Built to fit</h3><p>Shaped around your exact process — not a generic template.</p></div>
+      <div class="card reveal"><div class="badge">✅</div><h3>Tested &amp; reliable</h3><p>It works on day one, and keeps working.</p></div>
+      <div class="card reveal"><div class="badge">🤝</div><h3>Trained &amp; supported</h3><p>You and your team learn it, and I've got your back after.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="wrap" style="max-width:780px;">
+    <div class="sec-head reveal center"><div class="eyebrow">Common questions</div><h2>Good to know</h2></div>
+    <div class="faq">
+      <details class="reveal" open><summary>How much does a system cost?</summary><p>It depends on how big and complex your system is — it can start small. You get a free quote first, with no obligation.</p></details>
+      <details class="reveal"><summary>I'm not techy — can I use it?</summary><p>Yes. Systems are built to be simple and phone-friendly, and training is included so you and your staff learn it fast.</p></details>
+      <details class="reveal"><summary>How long does it take?</summary><p>A simple system is about 1–2 weeks; larger ones 4–6 weeks. You'll get a clear timeline with your quote.</p></details>
+      <details class="reveal"><summary>What if something breaks later?</summary><p>Ongoing support is part of the service. If something needs fixing, I handle it.</p></details>
+      <details class="reveal"><summary>Do you build mobile apps and IoT too?</summary><p>Yes — web systems, Android apps (Flutter), and IoT/hardware systems (ESP32). See my featured work above.</p></details>
+      <details class="reveal"><summary>Can I pay in installments?</summary><p>Typically a 50% downpayment to start and the balance on delivery. We can talk through what works for you.</p></details>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section>
+  <div class="wrap">
+    <div class="cta-band reveal">
+      <div class="eyebrow" style="color:#fff;opacity:.8;">Ready when you are</div>
+      <h2 style="color:#fff;font-size:clamp(1.8rem,4.5vw,2.7rem);margin:10px 0 14px;">Have a system in mind? Let's build it.</h2>
+      <p style="max-width:34rem;margin:0 auto 24px;opacity:.9;">Tell me about your business and I'll reply with a plan and a fair price. Free quote, no obligation.</p>
+      <a href="#contact" class="btn" style="background:#fff;color:var(--g1);">Get my free quote</a>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="alt">
+  <div class="wrap">
+    <div class="sec-head reveal center"><div class="eyebrow">Get in touch</div><h2>Let's build something.</h2><p>Tell me what you'd like me to build and I'll reply with a plan.</p></div>
+    <div class="contact-card reveal">
+      <input id="c-name" class="field" placeholder="Your name">
+      <input id="c-email" class="field" placeholder="Email or phone">
+      <textarea id="c-msg" class="field" rows="4" placeholder="What would you like me to build?"></textarea>
+      <button class="btn btn-grad" style="width:100%;justify-content:center;" onclick="sendContact()">Send message</button>
+      <div id="formMsg"></div>
+    </div>
+    <div class="links reveal">
+      <a href="mailto:youremail@gmail.com">✉️ Email</a>
+      <a href="https://facebook.com/yourpage" target="_blank" rel="noopener">Facebook</a>
+      <a href="https://linkedin.com/in/yourname" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://github.com/yourname" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </div>
+</section>
+
+<footer>© <span id="yr"></span> Angelou Fiel · AI-Assisted Software Developer · Pagadian City, Philippines</footer>
+
+<script>
+document.getElementById('yr').textContent = new Date().getFullYear();
+const FORM_ENDPOINT = ""; // paste Formspree URL for static hosting; blank uses FastAPI backend
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+const nav = document.getElementById('nav');
+addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 30));
+const prog = document.getElementById('progress');
+addEventListener('scroll', () => { const h=document.documentElement; prog.style.width=(h.scrollTop/(h.scrollHeight-h.clientHeight)*100)+'%'; });
+
+const io = new IntersectionObserver((es)=>es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); if(e.target.querySelector('.count')) runCount(e.target); io.unobserve(e.target);} }),{threshold:.14});
+document.querySelectorAll('.reveal').forEach((el,i)=>{ el.style.transitionDelay=(i%3*60)+'ms'; io.observe(el); });
+function runCount(scope){ scope.querySelectorAll('.count').forEach(el=>{ const t=+el.dataset.target; if(reduce){el.textContent=t;return;} let n=0,s=Math.max(1,Math.round(t/40)); const iv=setInterval(()=>{n+=s;if(n>=t){n=t;clearInterval(iv);}el.textContent=n;},26); }); }
+
+const words=['system','web app','mobile app','dashboard','IoT system'];
+let wi=0; const rot=document.getElementById('rotate');
+if(rot && !reduce){ setInterval(()=>{ rot.style.opacity=0; setTimeout(()=>{wi=(wi+1)%words.length;rot.textContent=words[wi];rot.style.opacity=1;},300); },2600); }
+
+async function sendContact(){
+  const name=document.getElementById('c-name').value.trim();
+  const email=document.getElementById('c-email').value.trim();
+  const message=document.getElementById('c-msg').value.trim();
+  const out=document.getElementById('formMsg');
+  if(!name||!email||!message){ out.style.color='#dc2626'; out.textContent='Please fill in all fields.'; return; }
+  out.style.color='var(--muted)'; out.textContent='Sending…';
+  try{
+    let res;
+    if(FORM_ENDPOINT){ res=await fetch(FORM_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({name,email,message})}); }
+    else{ res=await fetch('/api/contact',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams({name,email,message})}); }
+    if(!res.ok) throw new Error();
+    out.style.color='#16a34a'; out.textContent="Thanks! I'll get back to you soon.";
+    document.getElementById('c-name').value=''; document.getElementById('c-email').value=''; document.getElementById('c-msg').value='';
+  }catch(e){ out.style.color='#dc2626'; out.textContent='Something went wrong. Please try again.'; }
+}
+</script>
+</body>
+</html>
